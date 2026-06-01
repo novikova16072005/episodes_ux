@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -434,7 +434,7 @@ body.debug-off .voice-subtitle { display: none; }
   .quiz-option { min-width: 100%; }
   .episode-header h1 { font-size: 1.3rem; }
 }
-</style>
+#v2-scene-badge::before{content:"Сцена ";font-weight:400;opacity:0.7}</style>
 <style id="v2-prod-overrides">.ipe-debug{display:none!important}.audio-controls,.episode-nav{display:none!important}#v2-audio-controls{position:fixed;top:10px;right:12px;z-index:220;display:flex;gap:6px;align-items:center}#v2-audio-controls button{background:rgba(0,0,0,0.65);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:7px 10px;line-height:1;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;font-weight:600;min-width:36px;text-align:center}#v2-audio-controls button:hover{background:rgba(0,0,0,0.85)}#v2-scene-badge{position:fixed;top:10px;left:12px;z-index:220;background:rgba(0,0,0,0.7);color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:600;letter-spacing:0.02em;padding:6px 9px;border-radius:6px;border:1px solid rgba(255,255,255,0.22);pointer-events:none}.scene{animation:none!important}body.audio-mode section.scene:not(.audio-done) .story-choice{display:none!important}body:not(.audio-mode) section.scene.active:not(.v2-choice-revealed) .story-choice{display:none!important}body:not(.audio-mode) section.scene.active.v2-choice-revealed .story-choice{position:static!important;bottom:auto!important;left:auto!important;right:auto!important;padding:0!important;margin-top:1.25rem!important;z-index:auto!important}body.audio-mode section.scene.active{overflow:visible!important}.nav-bar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}</style>
 <script id="v2-audio-done-tracker">
 (function () {
@@ -488,7 +488,11 @@ body.debug-off .voice-subtitle { display: none; }
 
   function updateBadge(sid) {
     var badge = document.getElementById("v2-scene-badge");
-    if (badge) badge.textContent = sid || "—";
+    if (!badge) return;
+    var scenes = document.querySelectorAll("section.scene");
+    var cur = sid ? document.querySelector('section.scene[data-scene-id="' + sid + '"]') : null;
+    if (!cur || !scenes.length) { badge.textContent = ""; return; }
+    badge.textContent = (Array.from(scenes).indexOf(cur) + 1) + " / " + scenes.length;
   }
 
   // Text-mode choice-gate: пока юзер не нажал «Дальше» на сцене
@@ -740,7 +744,7 @@ body.debug-off .voice-subtitle { display: none; }
 </script>
 </head>
 <body>
-<div id="v2-audio-controls"><button id="v2-rate" type="button" title="Скорость 1× / 2×" aria-label="Скорость">1×</button><button id="v2-play" type="button" title="Play / Pause" aria-label="Play/Pause">▶</button><button id="v2-speaker" type="button" title="Динамик: аудио / текст" aria-label="Динамик">🔇</button><button id="v2-lang" type="button" title="Перевод (UK ↔ RU)" aria-label="Перевод">🌐 Перевод</button><button id="v2-debug-next" type="button" title="DEBUG: перейти к следующей сцене" aria-label="DEBUG Next">⏭ Дальше</button></div>
+<div id="v2-audio-controls"><button id="v2-rate" type="button" title="Скорость 1× / 2×" aria-label="Скорость">1×</button><button id="v2-play" type="button" title="Play / Pause" aria-label="Play/Pause">▶</button><button id="v2-speaker" type="button" title="Динамик: аудио / текст" aria-label="Динамик">🔇</button><button id="v2-lang" type="button" title="Перейти до RU-версії" aria-label="RU">🌐 RU</button></div>
 <div id="v2-scene-badge">—</div>
 
 
@@ -822,7 +826,7 @@ body.debug-off .voice-subtitle { display: none; }
       <details class="scene-meta"><summary>ℹ️</summary><div class="scene-location">Квартира Марко, комната · утро</div><div class="scene-chars">Марко, Софа</div><div class="scene-mood">удивление, надежда, напряжение</div><div class="scene-flags-inner">🏁 sofa_activated</div></details>
     </div>
     <div class="scene-content">
-      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, экран телефона светится<br><span class="vb-label">Атмосфера:</span> момент контакта — что-то ожило<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> экран телефона с мерцающим текстом<br><span class="vb-label">Марко:</span> шок, надежда, держит телефон обеими руками<br><span class="vb-label">Предметы:</span> телефон со светящимся треснутым экраном</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Марко натискає кнопку. Екран блимає.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Привіт... Марку... якщо ти це читаєш... значить, я вже...&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Екран гасне. Знову спалахує. Текст тепер рівний, з паузами між словами.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Я — Софа. Освітній помічник. Версія 0.7. Не фінальна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;marko&quot;, &quot;x&quot;: &quot;Де моя сестра?&quot;, &quot;im&quot;: &quot;text&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Для доступу до цієї інформації... доведи, що ти готовий. Це... важливо. Якщо ти не будеш готовий... станеться... непоправне.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;marko&quot;, &quot;x&quot;: &quot;Що станеться?!&quot;, &quot;im&quot;: &quot;text&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;...дані... заблоковані. Запитання перше.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Сообщение..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовое</span></div><span class="disabled-label">Ожидайте...</span></div></div></div>
+      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, экран телефона светится<br><span class="vb-label">Атмосфера:</span> момент контакта — что-то ожило<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> экран телефона с мерцающим текстом<br><span class="vb-label">Марко:</span> шок, надежда, держит телефон обеими руками<br><span class="vb-label">Предметы:</span> телефон со светящимся треснутым экраном</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Марко натискає кнопку. Екран блимає.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Привіт... Марку... якщо ти це читаєш... значить, я вже...&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Екран гасне. Знову спалахує. Текст тепер рівний, з паузами між словами.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Я — Софа. Освітній помічник. Версія 0.7. Не фінальна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;marko&quot;, &quot;x&quot;: &quot;Де моя сестра?&quot;, &quot;im&quot;: &quot;text&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Для доступу до цієї інформації... доведи, що ти готовий. Це... важливо. Якщо ти не будеш готовий... станеться... непоправне.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;marko&quot;, &quot;x&quot;: &quot;Що станеться?!&quot;, &quot;im&quot;: &quot;text&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;...дані... заблоковані. Запитання перше.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Повідомлення..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовий</span></div><span class="disabled-label">Зачекайте...</span></div></div></div>
     </div>
   </section>
 
@@ -832,7 +836,7 @@ body.debug-off .voice-subtitle { display: none; }
       <details class="scene-meta"><summary>ℹ️</summary><div class="scene-location">Квартира Марко, комната · утро</div><div class="scene-chars">Марко, Софа</div><div class="scene-mood">мягкий ввод, привязка к личному</div><div class="scene-branch">🔑 Условная реакция</div></details>
     </div>
     <div class="scene-content">
-      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, дневник раскрыт на странице с мороженым<br><span class="vb-label">Атмосфера:</span> личное воспоминание, пробуждённое Софой<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> страница дневника — два стаканчика мороженого<br><span class="vb-label">Марко:</span> узнавание, грусть, держит дневник и телефон<br><span class="vb-label">Предметы:</span> раскрытый дневник с рисунком мороженого, телефон</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Марко й хтось сперечалися про морозиво. Шоколадне краще? Полуничне? Чи можна виміряти, яке смачніше? Чи є «смаковимір»?&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Марко гортає щоденник, який лежав поруч із телефоном. На першій сторінці — малюнок: два стаканчики морозива. Один шоколадний, один рожевий. Підпис акуратним дрібним почерком із завитками на «д» та «у»: «Шоколадне краще. — С.» Поруч хтось — Марко впізнає свій почерк — дописав олівцем: «Ні! Полуничне!»&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Він пам&#x27;ятає цю суперечку. Пам&#x27;ятає. Пам&#x27;ятає, як вона пирхала. Пам&#x27;ятає, як вони обоє їли своє й показували одне одному язики.&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Мама каже — сестри немає. Щоденник каже — була.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Сообщение..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовое</span></div><span class="disabled-label">Ожидайте...</span></div></div></div>
+      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, дневник раскрыт на странице с мороженым<br><span class="vb-label">Атмосфера:</span> личное воспоминание, пробуждённое Софой<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> страница дневника — два стаканчика мороженого<br><span class="vb-label">Марко:</span> узнавание, грусть, держит дневник и телефон<br><span class="vb-label">Предметы:</span> раскрытый дневник с рисунком мороженого, телефон</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Марко й хтось сперечалися про морозиво. Шоколадне краще? Полуничне? Чи можна виміряти, яке смачніше? Чи є «смаковимір»?&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Марко гортає щоденник, який лежав поруч із телефоном. На першій сторінці — малюнок: два стаканчики морозива. Один шоколадний, один рожевий. Підпис акуратним дрібним почерком із завитками на «д» та «у»: «Шоколадне краще. — С.» Поруч хтось — Марко впізнає свій почерк — дописав олівцем: «Ні! Полуничне!»&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Він пам&#x27;ятає цю суперечку. Пам&#x27;ятає. Пам&#x27;ятає, як вона пирхала. Пам&#x27;ятає, як вони обоє їли своє й показували одне одному язики.&quot;}, {&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Мама каже — сестри немає. Щоденник каже — була.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Повідомлення..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовий</span></div><span class="disabled-label">Зачекайте...</span></div></div></div>
     </div>
   </section>
 
@@ -842,7 +846,7 @@ body.debug-off .voice-subtitle { display: none; }
       <details class="scene-meta"><summary>ℹ️</summary><div class="scene-location">Квартира Марко, комната · утро</div><div class="scene-chars">Марко, Софа</div><div class="scene-mood">сосредоточенность, ввод терминов</div></details>
     </div>
     <div class="scene-content">
-      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, экран телефона с текстом<br><span class="vb-label">Атмосфера:</span> начало урока — правила игры заданы через историю<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> экран телефона с текстом Софы<br><span class="vb-label">Марко:</span> внимание, понимание, смотрит на телефон</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Два види тверджень. ФАКТ — те, що можна перевірити. Порахувати. Виміряти. Торкнутися. Побачити.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;ДУМКА — те, що не можна перевірити приладами. Відчуття. Оцінка. У кожного своя — і це нормально.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Слова-підказки. «Мені здається», «найкращий», «гарний», «нудний» — швидше за все, думка. Число, відстань, назва — швидше за все, факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Перевіримо?&quot;}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;Софія казала: шоколадне краще. Марко вважає, що полуничне. Хто має рацію?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Ніхто — у кожного своє&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Софія&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Марко&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна виміряти, яке смачніше? Є прилад? Якщо ні — це думка. У кожного своя.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Ніхто. Немає «смаковиміру». Софія любила шоколадне — чудово. Марко любить полуничне — теж чудово. Ніхто не помиляється.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Софія — найкраща сестра у світі.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна виміряти «найкраща»? Є прилад? Немає «найкращемеру» — значить, думка.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. Немає приладу «найкращемір». Кожен вважає свою сестру найкращою — і це почуття, тепле й справжнє. Але почуття.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Щоденник Софії лежить на полиці.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна перевірити? Підійди й подивись — лежить щоденник чи ні?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Можна підійти й перевірити прямо зараз. Марко дивиться на полицю — щоденник там.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У класі 25 учнів.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна перерахувати учнів? Якщо можна — це факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Можна прийти й перерахувати. Порахуй — двадцять п&#x27;ять.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Математика — нудний предмет.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна виміряти нудьгу? Є прилад для цього?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. Для когось математика — улюблений предмет. Немає приладу «нудномір».&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Київ — столиця України.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи є Київ столицею України? Це можна перевірити в будь-якому джерелі.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Мапа, підручник — можна перевірити.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Правило... перше. Факт — можна перевірити. Думка — ні. Якщо не можеш перевірити — це не факт... навіть якщо звучить упевнено.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Запис... Софії...&quot;}, {&quot;t&quot;: &quot;unlock&quot;, &quot;x&quot;: &quot;🔓 Розблокувати запис&quot;}, {&quot;t&quot;: &quot;voice&quot;, &quot;s&quot;: &quot;sofia&quot;, &quot;d&quot;: 3, &quot;x&quot;: &quot;Братику, почни зі щоденника. Я вірю в тебе.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Сообщение..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовое</span></div><span class="disabled-label">Ожидайте...</span></div></div></div>
+      <div class="visual-brief"><span class="vb-label">Фон:</span> Комната Марко, экран телефона с текстом<br><span class="vb-label">Атмосфера:</span> начало урока — правила игры заданы через историю<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Фокус:</span> экран телефона с текстом Софы<br><span class="vb-label">Марко:</span> внимание, понимание, смотрит на телефон</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Два види тверджень. ФАКТ — те, що можна перевірити. Порахувати. Виміряти. Торкнутися. Побачити.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;ДУМКА — те, що не можна перевірити приладами. Відчуття. Оцінка. У кожного своя — і це нормально.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Слова-підказки. «Мені здається», «найкращий», «гарний», «нудний» — швидше за все, думка. Число, відстань, назва — швидше за все, факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Перевіримо?&quot;}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;Софія казала: шоколадне краще. Марко вважає, що полуничне. Хто має рацію?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Ніхто — у кожного своє&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Софія&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Марко&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна виміряти, яке смачніше? Є прилад? Якщо ні — це думка. У кожного своя.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Ніхто. Немає «смаковиміру». Софія любила шоколадне — чудово. Марко любить полуничне — теж чудово. Ніхто не помиляється.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Софія — найкраща сестра у світі.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна виміряти «найкраща»? Є прилад? Немає «найкращемеру» — значить, думка.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. Немає приладу «найкращемір». Кожен вважає свою сестру найкращою — і це почуття, тепле й справжнє. Але почуття.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Щоденник Софії лежить на полиці.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна перевірити? Підійди й подивись — лежить щоденник чи ні?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Можна підійти й перевірити прямо зараз. Марко дивиться на полицю — щоденник там.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У класі 25 учнів.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна перерахувати учнів? Якщо можна — це факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Можна прийти й перерахувати. Порахуй — двадцять п&#x27;ять.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Математика — нудний предмет.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна виміряти нудьгу? Є прилад для цього?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. Для когось математика — улюблений предмет. Немає приладу «нудномір».&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Київ — столиця України.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи є Київ столицею України? Це можна перевірити в будь-якому джерелі.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт. Мапа, підручник — можна перевірити.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Правило... перше. Факт — можна перевірити. Думка — ні. Якщо не можеш перевірити — це не факт... навіть якщо звучить упевнено.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Запис... Софії...&quot;}, {&quot;t&quot;: &quot;unlock&quot;, &quot;x&quot;: &quot;🔓 Розблокувати запис&quot;}, {&quot;t&quot;: &quot;voice&quot;, &quot;s&quot;: &quot;sofia&quot;, &quot;d&quot;: 3, &quot;x&quot;: &quot;Братику, почни зі щоденника. Я вірю в тебе.&quot;}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Повідомлення..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовий</span></div><span class="disabled-label">Зачекайте...</span></div></div></div>
     </div>
   </section>
 
@@ -914,7 +918,7 @@ body.debug-off .voice-subtitle { display: none; }
       <details class="scene-meta"><summary>ℹ️</summary><div class="scene-location">Школа, класс · утро</div><div class="scene-chars">Марко, Софа</div><div class="scene-mood">боевая готовность</div></details>
     </div>
     <div class="scene-content">
-      <div class="visual-brief"><span class="vb-label">Фон:</span> Школьный класс, Марко за партой с телефоном<br><span class="vb-label">Атмосфера:</span> быстрый переход к проверке — всё привязано к сюжету<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Марко:</span> концентрация, достаёт телефон из кармана<br><span class="vb-label">Предметы:</span> телефон с треснутым экраном, дневник рядом</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Софа вібрує в кишені. Марко дістає телефон.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Експрес-перевірка. Швидко. Факт чи думка?&quot;}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Голос Софії теплий.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна виміряти «теплий» голос? Є прилад?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. «Теплий» — це відчуття Марка. Немає «тепломеру» для голосів. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«На стіні висіли чотири рамки.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна порахувати рамки? Чотири — це число.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Порахуй — чотири рамки. Перевіряване. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У телефона Софи тріснутий екран.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Тріщину на екрані можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Подивись — тріщина є. Очима видно. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Рамки на стіні порожні.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна підійти й побачити, що в рамках? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Підійди й подивись — білий картон замість облич. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Мама говорить голосно.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Голосно — чи можна перевірити? Гучність вимірна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Гучність можна виміряти — децибели. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У Марка в кімнаті два ліжка.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна порахувати ліжка? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Порахуй — одне, два. Перевіряне. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Мама говорить тихо.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Тихо чи голосно — чи можна перевірити? Гучність вимірна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Тихо — можна почути й виміряти. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Щоденник лежав поруч із телефоном.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Розташування предметів — чи можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Можна побачити — поруч чи ні. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Фотографії Софії зникли.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Фотографії були — тепер рамки порожні. Можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Подивись на стіну — порожні рамки. Перевіряне. Експрес-тест пройдено.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Сообщение..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовое</span></div><span class="disabled-label">Ожидайте...</span></div></div></div>
+      <div class="visual-brief"><span class="vb-label">Фон:</span> Школьный класс, Марко за партой с телефоном<br><span class="vb-label">Атмосфера:</span> быстрый переход к проверке — всё привязано к сюжету<br><span class="vb-label">Камера:</span> close-up<br><span class="vb-label">Марко:</span> концентрация, достаёт телефон из кармана<br><span class="vb-label">Предметы:</span> телефон с треснутым экраном, дневник рядом</div><div class="phone" data-chat-messages="[{&quot;t&quot;: &quot;voiceover&quot;, &quot;s&quot;: &quot;author&quot;, &quot;name&quot;: &quot;Автор&quot;, &quot;x&quot;: &quot;Софа вібрує в кишені. Марко дістає телефон.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Експрес-перевірка. Швидко. Факт чи думка?&quot;}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Голос Софії теплий.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна виміряти «теплий» голос? Є прилад?&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Думка. «Теплий» — це відчуття Марка. Немає «тепломеру» для голосів. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«На стіні висіли чотири рамки.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна порахувати рамки? Чотири — це число.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Порахуй — чотири рамки. Перевіряване. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У телефона Софи тріснутий екран.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Тріщину на екрані можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Подивись — тріщина є. Очима видно. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Рамки на стіні порожні.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Чи можна підійти й побачити, що в рамках? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Підійди й подивись — білий картон замість облич. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Мама говорить голосно.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Голосно — чи можна перевірити? Гучність вимірна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Гучність можна виміряти — децибели. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«У Марка в кімнаті два ліжка.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Чи можна порахувати ліжка? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Порахуй — одне, два. Перевіряне. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Мама говорить тихо.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}, {&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}], &quot;fbFail&quot;: &quot;Тихо чи голосно — чи можна перевірити? Гучність вимірна.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Тихо — можна почути й виміряти. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Щоденник лежав поруч із телефоном.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Розташування предметів — чи можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Можна побачити — поруч чи ні. Далі!&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}, {&quot;t&quot;: &quot;quiz&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;q&quot;: &quot;«Фотографії Софії зникли.» Факт чи думка?&quot;, &quot;o&quot;: [{&quot;x&quot;: &quot;Думка&quot;, &quot;c&quot;: false}, {&quot;x&quot;: &quot;Факт&quot;, &quot;c&quot;: true}], &quot;fbFail&quot;: &quot;Фотографії були — тепер рамки порожні. Можна побачити? Якщо так — факт.&quot;}, {&quot;t&quot;: &quot;text&quot;, &quot;s&quot;: &quot;sofa&quot;, &quot;x&quot;: &quot;Факт! Подивись на стіну — порожні рамки. Перевіряне. Експрес-тест пройдено.&quot;, &quot;wq&quot;: true, &quot;ok&quot;: true}]" data-chat-live="true"><div class="phone-notch"></div><div class="phone-home"></div><div class="crack-overlay"><svg viewBox="0 0 375 812" fill="none"><path d="M310 0L305 35L292 72L278 120L262 170L248 218L232 268L218 315L202 362L188 412L172 460L158 510L140 560L122 612L102 665L80 720L55 780L45 812" stroke="rgba(0,0,0,0.12)" stroke-width="1.2"/><path d="M312 0L301 55L288 100L274 152L256 202L243 248L228 295L214 342" stroke="rgba(0,0,0,0.06)" stroke-width="0.6"/><path d="M248 218L268 245L295 262" stroke="rgba(0,0,0,0.09)" stroke-width="0.8"/><path d="M195 388L172 402L158 408" stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/><path d="M308 2L296 60L283 97L268 150L251 200L238 247L223 292L208 342L193 390L178 437L163 490L146 540L130 587L110 642L90 692L66 752L43 812" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/></svg></div><div class="chat-wrap"><div class="status-bar"><span class="sb-time">9:41</span><span class="sb-icons">⚡ 5G 🔋</span></div><div class="chat-header"><span class="ch-back">‹</span><div class="ch-avatar">📱</div><div class="ch-info"><div class="ch-name">Софа</div><div class="ch-status">онлайн</div></div></div><div class="chat-messages"></div><div class="chat-input-bar imode-disabled"><div class="ti-group"><input type="text" class="chat-input" readonly placeholder="Повідомлення..."><button class="send-btn">➤</button></div><div class="vi-group"><button class="mic-btn">🎤</button><span class="mic-label">Голосовий</span></div><span class="disabled-label">Зачекайте...</span></div></div></div>
     </div>
   </section>
 
@@ -973,7 +977,7 @@ body.debug-off .voice-subtitle { display: none; }
     </div>
   </section>
 
-  <section class="scene scene-cliffhanger scene-cliffhanger" data-scene-id="ep001_s22" data-index="17" data-next="ep002_s01" data-next-ep="../ep_002/ep_002.html">
+  <section class="scene scene-cliffhanger scene-cliffhanger" data-scene-id="ep001_s22" data-index="17">
     <div class="scene-header">
       <span class="scene-counter">18 / 18</span>
       <details class="scene-meta"><summary>ℹ️</summary><div class="scene-location">Школа, коридор · перемена</div><div class="scene-chars">Марко, Лина</div><div class="scene-mood">шок, тайна, надежда</div></details>
@@ -987,17 +991,121 @@ body.debug-off .voice-subtitle { display: none; }
     </div>
   </section>
 
+<style>
+/* ── Completion screen styles ── */
+.end-screen { padding: 2rem 1.25rem 4rem; }
+.end-screen.active { display: block; }
+.cs-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem; letter-spacing: 0.1em; color: var(--accent);
+  text-transform: uppercase; margin-bottom: 1.5rem;
+}
+.cs-title {
+  font-family: 'Georgia', serif;
+  font-size: 2rem; line-height: 1.2; font-weight: 700;
+  margin-bottom: 1.75rem;
+}
+.cs-stars {
+  display: flex; gap: 0.6rem; justify-content: center;
+  margin-bottom: 1.75rem;
+}
+.cs-star {
+  font-size: 2.4rem;
+  animation: starPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.cs-star:nth-child(1) { animation-delay: 0.1s; }
+.cs-star:nth-child(2) { animation-delay: 0.25s; }
+.cs-star:nth-child(3) { animation-delay: 0.4s; }
+@keyframes starPop {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.cs-star.empty { opacity: 0.2; }
+.cs-stats {
+  display: flex; justify-content: center; gap: 0;
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; margin-bottom: 1.75rem;
+}
+.cs-stat {
+  flex: 1; padding: 0.9rem 0.5rem; text-align: center;
+  border-right: 1px solid var(--border);
+}
+.cs-stat:last-child { border-right: none; }
+.cs-stat-label {
+  font-family: ui-monospace, monospace; font-size: 0.62rem;
+  letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+.cs-stat-value {
+  font-family: 'Georgia', serif; font-size: 1.3rem; font-weight: 700;
+}
+.cs-idea {
+  background: rgba(199,184,232,0.06); border: 1px dashed rgba(199,184,232,0.3);
+  border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.75rem;
+  text-align: left;
+}
+.cs-idea-label {
+  font-family: ui-monospace, monospace; font-size: 0.65rem;
+  letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.cs-idea-text {
+  font-family: 'Georgia', serif; font-size: 1.05rem; line-height: 1.55;
+  font-style: italic;
+}
+.cs-actions { display: flex; gap: 0.75rem; justify-content: center; }
+.cs-btn {
+  padding: 0.75rem 1.4rem; border-radius: 10px; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; text-decoration: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.cs-btn-secondary {
+  background: transparent; border: 2px solid var(--border); color: var(--text);
+}
+.cs-btn-secondary:hover { border-color: var(--accent); }
+.cs-btn-primary {
+  background: var(--accent); border: 2px solid var(--accent); color: #0d0d12;
+}
+.cs-btn-primary:hover { background: #d4c8f0; border-color: #d4c8f0; }
+</style>
+
 <div class="end-screen" id="endScreen">
-  <h2>Конец эпизода 1</h2>
-  <p>«Ранок без сестри»</p>
-  <div class="stats" id="stats"></div>
+  <p class="cs-label">Епізод 1 · Завершено</p>
+  <p class="cs-title">Молодець, Марко.<br>Ти дослухав до кінця.</p>
+  <div class="cs-stars">
+    <span class="cs-star">★</span>
+    <span class="cs-star">★</span>
+    <span class="cs-star empty">☆</span>
+  </div>
+  <div class="cs-stats">
+    <div class="cs-stat">
+      <div class="cs-stat-label">Час</div>
+      <div class="cs-stat-value">11 хв</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-label">Питання</div>
+      <div class="cs-stat-value" id="stats">6 / 6</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-label">Серія</div>
+      <div class="cs-stat-value">3 дні 🔥</div>
+    </div>
+  </div>
+  <div class="cs-idea">
+    <div class="cs-idea-label">+ Нова ідея</div>
+    <div class="cs-idea-text">«Думка — це те, що не можна перевірити приладами. У кожного вона своя.»</div>
+  </div>
+  <div class="cs-actions">
+    <button class="cs-btn cs-btn-secondary" onclick="location.reload()">Переслухати</button>
+    <a class="cs-btn cs-btn-primary" href="../ep_002/ep_002.html">Епізод 2 →</a>
+  </div>
 </div>
 
 <div class="nav-spacer"></div>
 
 <div class="nav-bar">
   <button class="nav-btn" id="btnPrev" disabled>← Назад</button>
-  <button class="nav-btn primary" id="btnNext">Дальше →</button>
+  <button class="nav-btn primary" id="btnNext">Далі →</button>
 </div>
 
 
@@ -1047,8 +1155,9 @@ var CFG={typingBase:80,typingRand:40,interMsg:60,afterSend:80,initDelay:30,voMin
     updateProgress(); updateNextButton();
     if(index>=scenes.length){
       endScreen.classList.add('active');
-      statsEl.textContent='\u041f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0445: '+correctCount+'/'+totalQuizzes;
+      statsEl.textContent=correctCount+' / '+totalQuizzes;
       btnNext.disabled=true;
+      setTimeout(function(){endScreen.scrollIntoView({behavior:'smooth',block:'start'});},50);
     } else { endScreen.classList.remove('active'); }
   }
 
@@ -1176,6 +1285,8 @@ var CFG={typingBase:80,typingRand:40,interMsg:60,afterSend:80,initDelay:30,voMin
           var opts=m.o.map(function(o,i){return '<button class="quiz-btn" data-c="'+o.c+'" data-i="'+i+'">'+o.x+'</button>';}).join('');
           row.innerHTML='<div class="bubble sofa"><div class="sender-name sofa">\u0421\u043e\u0444\u0430</div><div class="quiz-question">'+m.q+'</div><div class="quiz-options">'+opts+'</div><div class="msg-time">'+now()+'</div></div>';
           chatEl.appendChild(row);scroll();
+          var dlabel=bar.querySelector('.disabled-label');
+          if(dlabel)dlabel.textContent='Відповідай';
           row.querySelectorAll('.quiz-btn').forEach(function(b){
             b.onclick=function(){
               var ok=b.dataset.c==='true';
@@ -1192,6 +1303,7 @@ var CFG={typingBase:80,typingRand:40,interMsg:60,afterSend:80,initDelay:30,voMin
                 if(attempts===0){correctCount++;quizResults[si]='correct';}
                 else{quizResults[si]='retry_correct';}
                 quizOk=true;
+                if(dlabel)dlabel.textContent='Зачекайте...';
                 resolve(true);
               } else {
                 attempts++;
@@ -1237,10 +1349,10 @@ var CFG={typingBase:80,typingRand:40,interMsg:60,afterSend:80,initDelay:30,voMin
       if(!m||m.s!=='marko'||m.t!=='voice')return;
       if(micBtn.classList.contains('recording'))return;
       micBtn.classList.add('recording');
-      micLabel.textContent='\u0417\u0430\u043f\u0438\u0441\u044c...';micLabel.classList.add('rec');
+      micLabel.textContent='\u0417\u0430\u043f\u0438\u0441......';micLabel.classList.add('rec');
       setTimeout(function(){
         micBtn.classList.remove('recording');
-        micLabel.textContent='\u0413\u043e\u043b\u043e\u0441\u043e\u0432\u043e\u0435';micLabel.classList.remove('rec');
+        micLabel.textContent='\u0413\u043e\u043b\u043e\u0441\u043e\u0432\u0438\u0439';micLabel.classList.remove('rec');
         addVoice(m);setMode('disabled');
         idx++;setTimeout(processNext,CFG.afterSend);
       },CFG.recSim);
@@ -2265,29 +2377,87 @@ body:not(.audio-mode) .dl-narrator {
 /* ── story-choice (choice buttons) overlay near bottom ──────── */
 .story-choice {
   position: fixed;
-  bottom: 80px;          /* над nav-bar */
+  bottom: 80px;
   left: 0; right: 0;
   z-index: 50;
-  padding: 0 16px;
+  padding: 0;
   text-align: center;
   background: transparent;
 }
+
+/* Question pill — floats above the dark options area */
 .story-choice .choice-question {
   display: inline-block;
-  background: rgba(0,0,0,0.65);
-  color: #fff; padding: 8px 14px;
-  border-radius: 8px; font-size: 0.95rem;
-  margin: 0 0 10px;
+  background: rgba(10,10,16,0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  padding: 9px 24px;
+  border-radius: 28px;
+  font-family: 'Georgia', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0;
+  border: 1px solid rgba(199,184,232,0.18);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55);
 }
+
+/* Options — dark strip, column layout */
 .story-choice .choice-options {
-  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #0d0d12;
+  padding: 0.6rem 0.85rem 0.75rem;
+  margin-top: 0;
 }
+
+/* Individual option button */
 .story-choice .choice-option {
-  background: rgba(199,184,232,0.92) !important;
-  color: #15131c !important;
-  border: none; border-radius: 8px;
-  padding: 10px 16px; font-size: 0.9rem;
-  cursor: pointer; font-weight: 600;
+  background: rgba(199,184,232,0.11) !important;
+  color: #e8e6e3 !important;
+  border: 1.5px solid rgba(199,184,232,0.22) !important;
+  border-radius: 12px !important;
+  padding: 0.82rem 1.1rem !important;
+  font-size: 0.93rem !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  text-align: left !important;
+  margin-bottom: 0.45rem;
+  width: 100%;
+  transition: background 0.15s, border-color 0.15s;
+}
+.story-choice .choice-option:last-child { margin-bottom: 0 !important; }
+.story-choice .choice-option:hover {
+  background: rgba(199,184,232,0.22) !important;
+  border-color: rgba(199,184,232,0.5) !important;
+  color: #fff !important;
+}
+.story-choice .choice-option.chosen {
+  background: rgba(199,184,232,0.25) !important;
+  border-color: rgba(199,184,232,0.65) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+
+/* Static mode (non-audio, v2-choice-revealed) — fits in text flow */
+body:not(.audio-mode) .story-choice .choice-options {
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+/* Hide story text when choice is shown (audio mode: scene is audio-done) */
+body.audio-mode section.scene.audio-done:has(.story-choice) .author-text,
+body.audio-mode section.scene.audio-done:has(.story-choice) .dialogue-block,
+body.audio-mode section.scene.audio-done:has(.story-choice) .visual-brief {
+  display: none !important;
+}
+
+/* Hide story text when choice is shown (non-audio mode: v2-choice-revealed) */
+body:not(.audio-mode) section.scene.active.v2-choice-revealed .author-text,
+body:not(.audio-mode) section.scene.active.v2-choice-revealed .dialogue-block,
+body:not(.audio-mode) section.scene.active.v2-choice-revealed .visual-brief {
+  display: none !important;
 }
 </style>
 
@@ -2343,6 +2513,168 @@ body:not(.audio-mode) .dl-narrator {
     setTimeout(init, 0);
   }
 })();
+</script>
+
+<!-- ── Back to course button ── -->
+<style>
+#v2-back-btn {
+  position: fixed; top: 10px; left: 12px; z-index: 221;
+  background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.82);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.01em;
+  padding: 6px 11px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-decoration: none;
+}
+#v2-back-btn:hover { color: #fff; background: rgba(0,0,0,0.85); }
+/* Shift scene badge so it doesn't overlap the back button */
+#v2-scene-badge { left: 100px !important; }
+</style>
+<a id="v2-back-btn" href="../index.html">← Курс</a>
+
+<!-- ── Quiz Demo Overlay ── -->
+<style>
+#quizDemoOverlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 9000;
+  flex-direction: column;
+  background: #0d0d12;
+}
+#quizDemoOverlay.visible { display: flex; }
+
+/* Image area */
+.qd-stage {
+  flex: 1; position: relative; overflow: hidden;
+  background: #1a1510;
+}
+.qd-bg {
+  position: absolute; inset: 0;
+  background-image: url('https://pub-77b6fd849494491a8cd26f9e0df3db3f.r2.dev/ep_001/images/ep001_s01.png');
+  background-size: cover; background-position: center;
+}
+.qd-vignette {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.75) 100%);
+}
+
+/* Close button */
+.qd-close {
+  position: absolute; top: 12px; right: 14px;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+  color: rgba(255,255,255,0.7); font-size: 0.78rem;
+  padding: 5px 12px; cursor: pointer; z-index: 10;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.qd-close:hover { color: #fff; background: rgba(0,0,0,0.8); }
+
+/* Scene label */
+.qd-scene-label {
+  position: absolute; top: 12px; left: 14px;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+  color: rgba(255,255,255,0.75); font-size: 0.75rem;
+  padding: 5px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Question pill — bottom of image */
+.qd-question-wrap {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: center;
+  padding: 0 1rem 1.25rem;
+}
+.qd-question {
+  background: rgba(10,10,16,0.92); backdrop-filter: blur(8px);
+  border: 1px solid rgba(199,184,232,0.2);
+  border-radius: 28px;
+  color: #fff; font-family: 'Georgia', serif;
+  font-size: 1rem; font-weight: 600;
+  padding: 0.65rem 1.6rem;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* Options */
+.qd-options {
+  flex-shrink: 0;
+  padding: 0.6rem 0 0.75rem;
+  background: #0d0d12;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.qd-option {
+  margin: 0 0.9rem;
+  background: rgba(199,184,232,0.13);
+  border: 1.5px solid rgba(199,184,232,0.25);
+  border-radius: 14px;
+  color: #e8e6e3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.95rem; font-weight: 500;
+  padding: 0.85rem 1.2rem;
+  cursor: pointer; text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+}
+.qd-option:hover {
+  background: rgba(199,184,232,0.22);
+  border-color: rgba(199,184,232,0.5);
+}
+.qd-option.selected {
+  background: rgba(199,184,232,0.28);
+  border-color: rgba(199,184,232,0.7);
+  color: #fff;
+}
+</style>
+
+<div id="quizDemoOverlay">
+  <div class="qd-stage">
+    <div class="qd-bg"></div>
+    <div class="qd-vignette"></div>
+    <div class="qd-scene-label">Сцена 3 / 18</div>
+    <button class="qd-close" onclick="closeQuizDemo()">✕ закрити демо</button>
+    <div class="qd-question-wrap">
+      <div class="qd-question">Що робить Марко?</div>
+    </div>
+  </div>
+  <div class="qd-options">
+    <button class="qd-option" onclick="pickOption(this)">Погортати щоденник Софії</button>
+    <button class="qd-option" onclick="pickOption(this)">Увімкнути телефон</button>
+  </div>
+</div>
+
+<!-- Demo trigger button (fixed, bottom-left) -->
+<style>
+#quizDemoBtn {
+  position: fixed; bottom: 14px; left: 14px; z-index: 8000;
+  background: rgba(199,184,232,0.15); border: 1px solid rgba(199,184,232,0.4);
+  border-radius: 20px; color: #c7b8e8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  padding: 6px 14px; cursor: pointer;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.04em;
+}
+#quizDemoBtn:hover { background: rgba(199,184,232,0.25); }
+</style>
+<button id="quizDemoBtn" onclick="openQuizDemo()">◉ демо квізу</button>
+
+<script>
+function openQuizDemo() {
+  var ov = document.getElementById('quizDemoOverlay');
+  ov.classList.add('visible');
+  ov.querySelectorAll('.qd-option').forEach(function(b) {
+    b.classList.remove('selected-correct', 'selected-wrong');
+  });
+}
+function closeQuizDemo() {
+  document.getElementById('quizDemoOverlay').classList.remove('visible');
+}
+function pickOption(btn) {
+  document.querySelectorAll('.qd-option').forEach(function(b) {
+    b.classList.remove('selected');
+  });
+  btn.classList.add('selected');
+}
 </script>
 </body>
 </html>

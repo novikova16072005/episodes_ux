@@ -1,127 +1,679 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="utf-8">
-<title>Сила Слова — combined</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сила Слова — Курс</title>
 <style>
 :root {
   color-scheme: dark;
   --bg: #0d0d12;
   --card: #16161e;
+  --card-hover: #1c1c28;
   --border: #2a2a35;
   --text: #e8e6e3;
   --muted: #8a8a8a;
   --accent: #c7b8e8;
+  --accent-soft: rgba(199,184,232,0.08);
+  --ok: #4caf50;
+  --ok-soft: rgba(76,175,80,0.07);
+  --ok-border: rgba(76,175,80,0.25);
+  --progress-color: #9b8fd4;
+  --lock: rgba(255,255,255,0.04);
 }
-* { box-sizing: border-box; }
+
+/* ── Light theme ── */
+body.light {
+  color-scheme: light;
+  --bg: #f5f4f1;
+  --card: #ffffff;
+  --card-hover: #f0eefb;
+  --border: #e2e0ea;
+  --text: #1c1b28;
+  --muted: #7a7888;
+  --accent: #6b4fb8;
+  --accent-soft: rgba(107,79,184,0.07);
+  --ok: #2e7d32;
+  --ok-soft: rgba(46,125,50,0.06);
+  --ok-border: rgba(46,125,50,0.22);
+  --progress-color: #6b4fb8;
+  --lock: rgba(0,0,0,0.03);
+}
+body.light .hero {
+  background: linear-gradient(135deg, #ece8f8 0%, #ffffff 100%);
+}
+body.light .hero-bar-wrap,
+body.light .ep-prog-bar-wrap { background: rgba(0,0,0,0.08); }
+body.light .ep-stars .empty { color: rgba(0,0,0,0.15); }
+body.light .hero-btn { color: #ffffff; }
+body.light .ep-locked { opacity: 0.35; }
+
+/* ── Theme toggle button ── */
+.theme-toggle {
+  position: fixed; top: 14px; right: 14px; z-index: 100;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 20px;
+  padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--accent); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  margin: 0; padding: 2.5rem 1rem;
-  background: var(--bg); color: var(--text);
+  background: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
+  padding: 2rem 1rem 4rem;
 }
-h1 {
-  margin: 0 auto 0.4rem; max-width: 720px;
-  font-size: 1.55rem; font-weight: 600;
+.wrap { max-width: 720px; margin: 0 auto; }
+
+/* ── Back link ── */
+.back-link {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.83rem;
+  font-family: ui-monospace, monospace;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
 }
-.sub {
-  margin: 0 auto 2rem; max-width: 720px;
-  color: var(--muted); font-size: 0.88rem;
+.back-link:hover { color: var(--text); }
+
+/* ── Header ── */
+.course-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.2rem;
 }
-.grid {
-  margin: 0 auto; max-width: 720px;
-  display: grid; gap: 0.65rem;
+.course-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
 }
+
+/* ── Hero card ── */
+.hero {
+  background: linear-gradient(135deg, #1e1a2e 0%, #16161e 100%);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+.hero-label {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+.hero-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.hero-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+.hero-bar-wrap {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+}
+.hero-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  width: 30%;
+}
+.hero-btn {
+  background: var(--accent);
+  color: #0d0d12;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.3rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+  align-self: center;
+}
+.hero-btn:hover { background: #d4c8f0; }
+
+/* ── List header ── */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+.list-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.list-count {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: ui-monospace, monospace;
+}
+
+/* ── Episode grid ── */
+.grid { display: grid; gap: 0.5rem; }
+
+/* ── Episode row base ── */
 .ep {
-  display: flex; align-items: center; gap: 0.9rem;
-  padding: 1rem 1.2rem;
-  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-  text-decoration: none; color: var(--text);
+  display: grid;
+  grid-template-columns: 2.2rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.9rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
   transition: border-color 0.15s, background 0.15s;
 }
-.ep.ready:hover { border-color: var(--accent); background: #1c1c28; }
-.ep.not-ready { opacity: 0.45; cursor: not-allowed; }
-.ep-id {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.78rem; color: var(--accent);
+.ep:hover:not(.ep-locked) { border-color: var(--accent); background: var(--card-hover); }
+
+.ep-num {
+  font-family: 'Georgia', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1;
+}
+.ep-body { min-width: 0; }
+.ep-name {
+  font-size: 0.97rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ep-time {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+.ep-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+.ep-stars {
+  font-size: 0.85rem;
   letter-spacing: 0.05em;
+  color: #f5c542;
 }
-.ep-title { font-size: 1rem; flex: 1 1 auto; }
-.ep-meta {
-  color: var(--muted); font-size: 0.75rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+.ep-stars .empty { color: rgba(255,255,255,0.2); }
+.ep-tag {
+  font-family: ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
 }
-.ep-status {
-  font-size: 0.68rem; padding: 0.22rem 0.5rem; border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  letter-spacing: 0.05em;
+
+/* ── DONE state ── */
+.ep-done {
+  background: var(--ok-soft);
+  border-color: var(--ok-border);
 }
-.ep.ready .ep-status { background: rgba(199,184,232,0.18); color: var(--accent); }
-.ep.not-ready .ep-status { background: rgba(255,255,255,0.05); color: var(--muted); }
-footer {
-  margin: 3rem auto 0; max-width: 720px;
-  color: #555; font-size: 0.72rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+.ep-done .ep-num { color: var(--ok); }
+.ep-done .ep-tag { background: rgba(76,175,80,0.15); color: var(--ok); }
+
+/* ── IN PROGRESS state ── */
+.ep-progress {
+  background: rgba(199,184,232,0.06);
+  border-color: rgba(199,184,232,0.35);
+}
+.ep-progress .ep-num { color: var(--accent); }
+.ep-progress .ep-tag { background: rgba(199,184,232,0.15); color: var(--accent); }
+.ep-prog-bar-wrap {
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  height: 4px;
+  overflow: hidden;
+  margin-top: 0.35rem;
+}
+.ep-prog-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+/* ── LOCKED state ── */
+.ep-locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ep-locked .ep-tag { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+/* ── Parent link ── */
+.parent-link-wrap {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+.parent-link {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: ui-monospace, monospace;
+}
+.parent-link:hover { color: var(--text); }
+
+/* ── Variant picker (testing only) ── */
+.variant-section {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.variant-label {
+  font-family: ui-monospace, monospace;
+  font-size: 0.68rem; letter-spacing: 0.08em; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.variant-label::after {
+  content: 'ТІЛЬКИ ДЛЯ ТЕСТУВАННЯ';
+  font-size: 0.58rem; background: rgba(245,166,35,0.15);
+  color: #f5a623; border-radius: 4px; padding: 0.15rem 0.4rem;
+  letter-spacing: 0.06em;
+}
+.variant-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem;
+}
+.variant-card {
+  display: block; text-decoration: none; color: var(--text);
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 12px; padding: 1rem; text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.variant-card:hover { border-color: var(--accent); background: var(--card-hover); }
+.variant-card.active { border-color: var(--accent); background: rgba(199,184,232,0.06); }
+.vc-letter {
+  font-family: 'Georgia', serif; font-size: 1.6rem;
+  font-weight: 700; color: var(--accent); margin-bottom: 0.35rem; line-height: 1;
+}
+.vc-name {
+  font-size: 0.78rem; font-weight: 600; margin-bottom: 0.25rem;
+}
+.vc-desc {
+  font-size: 0.7rem; color: var(--muted); line-height: 1.4;
 }
 </style>
 </head>
 <body>
-<a href="/" style="display:inline-block;margin:0 auto 1rem;max-width:720px;width:100%;color:#8a8a8a;font-size:0.85rem;text-decoration:none;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">← Главное меню</a>
+<div class="wrap">
 
-<h1>Сила Слова — combined</h1>
-<p class="sub">Склейка voice + image: текст по дефолту, аудио по тоглу справа сверху, иллюстрации всегда видны.</p>
-<div class="grid">
-<a class="ep ready" href="ep_001/ep_001.html"><span class="ep-id">EP 001</span><span class="ep-title">Ранок без сестри</span><span class="ep-meta">14 илл · 134 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_002/ep_002.html"><span class="ep-id">EP 002</span><span class="ep-title">Неправда та її види</span><span class="ep-meta">14 илл · 144 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_003/ep_003.html"><span class="ep-id">EP 003</span><span class="ep-title">Хитрі твердження</span><span class="ep-meta">17 илл · 139 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_004/ep_004.html"><span class="ep-id">EP 004</span><span class="ep-title">Детектив правди</span><span class="ep-meta">17 илл · 166 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_005/ep_005.html"><span class="ep-id">EP 005</span><span class="ep-title">Якщо вірно — вірно завжди</span><span class="ep-meta">12 илл · 146 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_006/ep_006.html"><span class="ep-id">EP 006</span><span class="ep-title">Світлофор</span><span class="ep-meta">8 илл · 79 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_007/ep_007.html"><span class="ep-id">EP 007</span><span class="ep-title">47</span><span class="ep-meta">10 илл · 85 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_008/ep_008.html"><span class="ep-id">EP 008</span><span class="ep-title">Ляльковод</span><span class="ep-meta">11 илл · 138 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_009/ep_009.html"><span class="ep-id">EP 009</span><span class="ep-title">Три цілі суперечки</span><span class="ep-meta">17 илл · 155 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_010/ep_010.html"><span class="ep-id">EP 010</span><span class="ep-title">Розвідник</span><span class="ep-meta">19 илл · 157 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_011/ep_011.html"><span class="ep-id">EP 011</span><span class="ep-title">Перший, хто чує</span><span class="ep-meta">19 илл · 132 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_012/ep_012.html"><span class="ep-id">EP 012</span><span class="ep-title">Формула висловлювання</span><span class="ep-meta">17 илл · 140 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_013/ep_013.html"><span class="ep-id">EP 013</span><span class="ep-title">Те, що слова ховають</span><span class="ep-meta">8 илл · 79 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_014/ep_014.html"><span class="ep-id">EP 014</span><span class="ep-title">Рекламна вулиця</span><span class="ep-meta">9 илл · 96 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_015/ep_015.html"><span class="ep-id">EP 015</span><span class="ep-title">Два плакати</span><span class="ep-meta">8 илл · 85 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_016/ep_016.html"><span class="ep-id">EP 016</span><span class="ep-title">Табуретка</span><span class="ep-meta">10 илл · 97 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_017/ep_017.html"><span class="ep-id">EP 017</span><span class="ep-title">Сім ланок</span><span class="ep-meta">12 илл · 109 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_018/ep_018.html"><span class="ep-id">EP 018</span><span class="ep-title">Дерево зв'язків</span><span class="ep-meta">10 илл · 92 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_019/ep_019.html"><span class="ep-id">EP 019</span><span class="ep-title">Про що ми взагалі сперечаємось?</span><span class="ep-meta">14 илл · 101 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_020/ep_020.html"><span class="ep-id">EP 020</span><span class="ep-title">Мам, я б теж обрала його</span><span class="ep-meta">6 илл · 96 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_021/ep_021.html"><span class="ep-id">EP 021</span><span class="ep-title">Поворотник</span><span class="ep-meta">11 илл · 95 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_022/ep_022.html"><span class="ep-id">EP 022</span><span class="ep-title">Що сказав — що зробив</span><span class="ep-meta">7 илл · 82 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_023/ep_023.html"><span class="ep-id">EP 023</span><span class="ep-title">Усі, кожен, ніхто</span><span class="ep-meta">8 илл · 79 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_024/ep_024.html"><span class="ep-id">EP 024</span><span class="ep-title">Скажи моє ім'я</span><span class="ep-meta">9 илл · 92 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_025/ep_025.html"><span class="ep-id">EP 025</span><span class="ep-title">Шоколад на щоці</span><span class="ep-meta">8 илл · 87 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_026/ep_026.html"><span class="ep-id">EP 026</span><span class="ep-title">Раніше ти казав...</span><span class="ep-meta">9 илл · 85 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_027/ep_027.html"><span class="ep-id">EP 027</span><span class="ep-title">Тато сказав</span><span class="ep-meta">9 илл · 81 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_028/ep_028.html"><span class="ep-id">EP 028</span><span class="ep-title">Батько Віри</span><span class="ep-meta">8 илл · 82 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_029/ep_029.html"><span class="ep-id">EP 029</span><span class="ep-title">Солом'яне опудало</span><span class="ep-meta">9 илл · 87 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_030/ep_030.html"><span class="ep-id">EP 030</span><span class="ep-title">Правда як зброя</span><span class="ep-meta">8 илл · 80 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_031/ep_031.html"><span class="ep-id">EP 031</span><span class="ep-title">Чотири кнопки страху</span><span class="ep-meta">13 илл · 97 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_032/ep_032.html"><span class="ep-id">EP 032</span><span class="ep-title">Зупинись</span><span class="ep-meta">8 илл · 96 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_033/ep_033.html"><span class="ep-id">EP 033</span><span class="ep-title">Ціна кожного кроку</span><span class="ep-meta">7 илл · 91 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_034/ep_034.html"><span class="ep-id">EP 034</span><span class="ep-title">Три нитки</span><span class="ep-meta">7 илл · 84 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_035/ep_035.html"><span class="ep-id">EP 035</span><span class="ep-title">Десятки</span><span class="ep-meta">7 илл · 89 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_036/ep_036.html"><span class="ep-id">EP 036</span><span class="ep-title">Агент «С»</span><span class="ep-meta">8 илл · 93 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_037/ep_037.html"><span class="ep-id">EP 037</span><span class="ep-title">Або — або</span><span class="ep-meta">10 илл · 122 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_038/ep_038.html"><span class="ep-id">EP 038</span><span class="ep-title">Ціна третього варіанту</span><span class="ep-meta">10 илл · 94 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_039/ep_039.html"><span class="ep-id">EP 039</span><span class="ep-title">Скляна кімната</span><span class="ep-meta">10 илл · 96 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_040/ep_040.html"><span class="ep-id">EP 040</span><span class="ep-title">Розвідник у вежі</span><span class="ep-meta">12 илл · 111 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_041/ep_041.html"><span class="ep-id">EP 041</span><span class="ep-title">Передемагогувати</span><span class="ep-meta">20 илл · 416 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_042/ep_042.html"><span class="ep-id">EP 042</span><span class="ep-title">Коли ви перестали любити учнів?</span><span class="ep-meta">16 илл · 132 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_043/ep_043.html"><span class="ep-id">EP 043</span><span class="ep-title">Тринадцятий прийом</span><span class="ep-meta">13 илл · 133 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_044/ep_044.html"><span class="ep-id">EP 044</span><span class="ep-title">Карта</span><span class="ep-meta">12 илл · 163 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_045/ep_045.html"><span class="ep-id">EP 045</span><span class="ep-title">Найкращий учень</span><span class="ep-meta">16 илл · 215 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_046/ep_046.html"><span class="ep-id">EP 046</span><span class="ep-title">Іспит сумніву</span><span class="ep-meta">14 илл · 199 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_047/ep_047.html"><span class="ep-id">EP 047</span><span class="ep-title">Інтелектуальна битва</span><span class="ep-meta">19 илл · 189 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_048/ep_048.html"><span class="ep-id">EP 048</span><span class="ep-title">Стіни прозоріють</span><span class="ep-meta">19 илл · 180 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_049/ep_049.html"><span class="ep-id">EP 049</span><span class="ep-title">Повернення</span><span class="ep-meta">16 илл · 183 audio</span><span class="ep-status">READY</span></a>
-<a class="ep ready" href="ep_050/ep_050.html"><span class="ep-id">EP 050</span><span class="ep-title">Один</span><span class="ep-meta">15 илл · 131 audio</span><span class="ep-status">READY</span></a>
+<a class="back-link" href="/">← Головне меню</a>
+
+<h1 class="course-title">Сила Слова</h1>
+<p class="course-sub">Курс критичного мислення · 50 епізодів</p>
+
+<!-- Hero card -->
+<div class="hero">
+  <div>
+    <div class="hero-label">Продовжити з місця</div>
+    <div class="hero-title">Епізод 2 · Неправда та її види</div>
+    <div class="hero-meta">Сцена 4 з 14 · лишилось ~8 хв</div>
+    <div class="hero-bar-wrap"><div class="hero-bar-fill"></div></div>
+  </div>
+  <a class="hero-btn" href="ep_002/ep_002.html">▶ Продовжити</a>
 </div>
-<footer>50/50 episodes ready</footer>
+
+<!-- List header -->
+<div class="list-header">
+  <span class="list-label">Всі епізоди</span>
+  <span class="list-count">1 / 50 завершено</span>
+</div>
+
+<!-- Episode list -->
+<div class="grid">
+
+<!-- EP 001 — DONE -->
+<a class="ep ep-done" href="ep_001/ep_001.html">
+  <span class="ep-num">1</span>
+  <div class="ep-body">
+    <div class="ep-name">Ранок без сестри</div>
+    <div class="ep-time">11 хв · пройдено вчора</div>
+  </div>
+  <div class="ep-right">
+    <span class="ep-stars">★★<span class="empty">☆</span></span>
+    <span class="ep-tag">✓ ГОТОВО</span>
+  </div>
+</a>
+
+<!-- EP 002 — IN PROGRESS -->
+<a class="ep ep-progress" href="ep_002/ep_002.html">
+  <span class="ep-num">2</span>
+  <div class="ep-body">
+    <div class="ep-name">Неправда та її види</div>
+    <div class="ep-time">Сцена 4 з 14 · лишилось ~8 хв</div>
+    <div class="ep-prog-bar-wrap"><div class="ep-prog-bar-fill" style="width:30%"></div></div>
+  </div>
+  <div class="ep-right">
+    <span class="ep-stars"><span class="empty">☆☆☆</span></span>
+    <span class="ep-tag">В ПРОЦЕСІ</span>
+  </div>
+</a>
+
+<!-- EP 003–050 — LOCKED -->
+<div class="ep ep-locked">
+  <span class="ep-num">3</span>
+  <div class="ep-body">
+    <div class="ep-name">Хитрі твердження</div>
+    <div class="ep-time">~12 хв</div>
+  </div>
+  <div class="ep-right">
+    <span class="ep-stars"><span class="empty">☆☆☆</span></span>
+    <span class="ep-tag">🔒</span>
+  </div>
+</div>
+
+<div class="ep ep-locked">
+  <span class="ep-num">4</span>
+  <div class="ep-body">
+    <div class="ep-name">Детектив правди</div>
+    <div class="ep-time">~14 хв</div>
+  </div>
+  <div class="ep-right">
+    <span class="ep-stars"><span class="empty">☆☆☆</span></span>
+    <span class="ep-tag">🔒</span>
+  </div>
+</div>
+
+<div class="ep ep-locked">
+  <span class="ep-num">5</span>
+  <div class="ep-body"><div class="ep-name">Якщо вірно — вірно завжди</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">6</span>
+  <div class="ep-body"><div class="ep-name">Світлофор</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">7</span>
+  <div class="ep-body"><div class="ep-name">47</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">8</span>
+  <div class="ep-body"><div class="ep-name">Ляльковод</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">9</span>
+  <div class="ep-body"><div class="ep-name">Три цілі суперечки</div><div class="ep-time">~13 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">10</span>
+  <div class="ep-body"><div class="ep-name">Розвідник</div><div class="ep-time">~13 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">11</span>
+  <div class="ep-body"><div class="ep-name">Перший, хто чує</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">12</span>
+  <div class="ep-body"><div class="ep-name">Формула висловлювання</div><div class="ep-time">~12 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">13</span>
+  <div class="ep-body"><div class="ep-name">Те, що слова ховають</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">14</span>
+  <div class="ep-body"><div class="ep-name">Рекламна вулиця</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">15</span>
+  <div class="ep-body"><div class="ep-name">Два плакати</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">16</span>
+  <div class="ep-body"><div class="ep-name">Табуретка</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">17</span>
+  <div class="ep-body"><div class="ep-name">Сім ланок</div><div class="ep-time">~9 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">18</span>
+  <div class="ep-body"><div class="ep-name">Дерево зв'язків</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">19</span>
+  <div class="ep-body"><div class="ep-name">Про що ми взагалі сперечаємось?</div><div class="ep-time">~9 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">20</span>
+  <div class="ep-body"><div class="ep-name">Мам, я б теж обрала його</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">21</span>
+  <div class="ep-body"><div class="ep-name">Поворотник</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">22</span>
+  <div class="ep-body"><div class="ep-name">Що сказав — що зробив</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">23</span>
+  <div class="ep-body"><div class="ep-name">Усі, кожен, ніхто</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">24</span>
+  <div class="ep-body"><div class="ep-name">Скажи моє ім'я</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">25</span>
+  <div class="ep-body"><div class="ep-name">Шоколад на щоці</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">26</span>
+  <div class="ep-body"><div class="ep-name">Раніше ти казав...</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">27</span>
+  <div class="ep-body"><div class="ep-name">Тато сказав</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">28</span>
+  <div class="ep-body"><div class="ep-name">Батько Віри</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">29</span>
+  <div class="ep-body"><div class="ep-name">Солом'яне опудало</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">30</span>
+  <div class="ep-body"><div class="ep-name">Правда як зброя</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">31</span>
+  <div class="ep-body"><div class="ep-name">Чотири кнопки страху</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">32</span>
+  <div class="ep-body"><div class="ep-name">Зупинись</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">33</span>
+  <div class="ep-body"><div class="ep-name">Ціна кожного кроку</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">34</span>
+  <div class="ep-body"><div class="ep-name">Три нитки</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">35</span>
+  <div class="ep-body"><div class="ep-name">Десятки</div><div class="ep-time">~7 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">36</span>
+  <div class="ep-body"><div class="ep-name">Агент «С»</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">37</span>
+  <div class="ep-body"><div class="ep-name">Або — або</div><div class="ep-time">~10 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">38</span>
+  <div class="ep-body"><div class="ep-name">Ціна третього варіанту</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">39</span>
+  <div class="ep-body"><div class="ep-name">Скляна кімната</div><div class="ep-time">~8 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">40</span>
+  <div class="ep-body"><div class="ep-name">Розвідник у вежі</div><div class="ep-time">~9 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">41</span>
+  <div class="ep-body"><div class="ep-name">Передемагогувати</div><div class="ep-time">~34 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">42</span>
+  <div class="ep-body"><div class="ep-name">Коли ви перестали любити учнів?</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">43</span>
+  <div class="ep-body"><div class="ep-name">Тринадцятий прийом</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">44</span>
+  <div class="ep-body"><div class="ep-name">Карта</div><div class="ep-time">~13 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">45</span>
+  <div class="ep-body"><div class="ep-name">Найкращий учень</div><div class="ep-time">~17 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">46</span>
+  <div class="ep-body"><div class="ep-name">Іспит сумніву</div><div class="ep-time">~16 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">47</span>
+  <div class="ep-body"><div class="ep-name">Інтелектуальна битва</div><div class="ep-time">~15 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">48</span>
+  <div class="ep-body"><div class="ep-name">Стіни прозоріють</div><div class="ep-time">~15 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">49</span>
+  <div class="ep-body"><div class="ep-name">Повернення</div><div class="ep-time">~15 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+<div class="ep ep-locked">
+  <span class="ep-num">50</span>
+  <div class="ep-body"><div class="ep-name">Один</div><div class="ep-time">~11 хв</div></div>
+  <div class="ep-right"><span class="ep-stars"><span class="empty">☆☆☆</span></span><span class="ep-tag">🔒</span></div>
+</div>
+
+</div><!-- /grid -->
+
+<div class="parent-link-wrap">
+  <a class="parent-link" href="parent.html">👨‍👩‍👧 Батьківський дашборд →</a>
+</div>
+
+<!-- Variant picker -->
+<div class="variant-section">
+  <div class="variant-label">Дизайн плеєра</div>
+  <div class="variant-cards">
+    <a class="variant-card active" href="ep_001/ep_001.html">
+      <div class="vc-letter">A</div>
+      <div class="vc-name">Підсвічування</div>
+      <div class="vc-desc">Скрабер + лічильник сцен + прогрес</div>
+    </a>
+    <a class="variant-card" href="ep_001/ep_001_b.html">
+      <div class="vc-letter">B</div>
+      <div class="vc-name">Мінімалізм</div>
+      <div class="vc-desc">Крапки сцен + тонкий скрабер + тап-зони</div>
+    </a>
+    <a class="variant-card" href="ep_001/ep_001_c.html">
+      <div class="vc-letter">C</div>
+      <div class="vc-name">Читання</div>
+      <div class="vc-desc">Великий текст + Аа + підсвічування слова</div>
+    </a>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+  <span id="themeIcon">☀️</span>
+  <span id="themeLabel">Світла</span>
+</button>
+
+<script>
+function toggleTheme() {
+  var isLight = document.body.classList.toggle('light');
+  document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+  document.getElementById('themeLabel').textContent = isLight ? 'Темна' : 'Світла';
+}
+</script>
 </body>
 </html>

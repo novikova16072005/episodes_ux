@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Батьківський дашборд — Сила Слова</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0d0d12;
+  --card: #16161e;
+  --card-hover: #1c1c28;
+  --border: #2a2a35;
+  --text: #e8e6e3;
+  --muted: #8a8a8a;
+  --accent: #c7b8e8;
+  --accent-soft: rgba(199,184,232,0.08);
+  --ok: #4caf50;
+  --ok-soft: rgba(76,175,80,0.06);
+  --warn: #f5a623;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh; padding: 2rem 1rem 5rem;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+
+/* ── Back ── */
+.back-link {
+  display: inline-block; color: var(--muted); font-size: 0.83rem;
+  font-family: ui-monospace, monospace; text-decoration: none; margin-bottom: 1.5rem;
+}
+.back-link:hover { color: var(--text); }
+
+/* ── Header ── */
+.dash-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 2rem; gap: 1rem;
+}
+.dash-header-left h1 {
+  font-family: 'Georgia', serif; font-size: 1.55rem; font-weight: 700;
+  margin-bottom: 0.2rem; letter-spacing: -0.02em;
+}
+.dash-header-left p { font-size: 0.88rem; color: var(--muted); }
+.dash-header-right { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.hdr-btn {
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 0.5rem 0.85rem; font-size: 0.82rem;
+  cursor: pointer; font-family: inherit;
+}
+.hdr-btn:hover { border-color: var(--accent); }
+.hdr-btn.active { border-color: var(--accent); color: var(--accent); }
+
+/* ── KPI cards ── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 0.65rem;
+  margin-bottom: 1.75rem;
+}
+@media (max-width: 600px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+.kpi-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1rem 1rem 0.9rem;
+}
+.kpi-label {
+  font-family: ui-monospace, monospace; font-size: 0.62rem;
+  letter-spacing: 0.09em; color: var(--muted); text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.kpi-value {
+  font-family: 'Georgia', serif; font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 0.25rem; line-height: 1.1;
+}
+.kpi-trend {
+  font-size: 0.72rem; color: var(--ok);
+}
+.kpi-trend.neutral { color: var(--muted); }
+
+/* ── Section block ── */
+.section-block {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem 1.4rem; margin-bottom: 1rem;
+}
+.section-title {
+  font-family: ui-monospace, monospace; font-size: 0.68rem;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.section-sub {
+  font-size: 0.78rem; color: var(--muted); margin-bottom: 1.1rem;
+}
+
+/* ── Activity bar chart ── */
+.chart-wrap { display: flex; gap: 8px; align-items: flex-end; height: 80px; }
+.chart-day { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.chart-bar-wrap { flex: 1; display: flex; align-items: flex-end; width: 100%; }
+.chart-bar {
+  width: 100%; border-radius: 4px 4px 0 0;
+  background: rgba(199,184,232,0.18);
+  transition: background 0.15s;
+}
+.chart-bar.active { background: var(--accent); }
+.chart-bar.mid { background: rgba(199,184,232,0.45); }
+.chart-day-label {
+  font-family: ui-monospace, monospace; font-size: 0.62rem; color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── Ideas list ── */
+.idea-item {
+  display: flex; gap: 0.85rem; align-items: flex-start;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+}
+.idea-item:last-child { border-bottom: none; padding-bottom: 0; }
+.idea-ep {
+  font-family: ui-monospace, monospace; font-size: 0.7rem;
+  color: var(--accent); flex-shrink: 0; padding-top: 0.15rem;
+  min-width: 3.5rem;
+}
+.idea-text { font-size: 0.9rem; line-height: 1.5; }
+
+/* ── Stats panel (hidden by default) ── */
+.stats-panel, .settings-panel { display: none; }
+.stats-panel.visible, .settings-panel.visible { display: block; }
+
+/* ── Settings ── */
+.settings-group { margin-bottom: 1.25rem; }
+.settings-group:last-child { margin-bottom: 0; }
+.setting-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.65rem 0; border-bottom: 1px solid var(--border);
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-size: 0.9rem; }
+.setting-value {
+  font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--accent);
+}
+.setting-select {
+  background: var(--bg); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 0.3rem 0.6rem; font-size: 0.8rem; cursor: pointer;
+}
+.toggle-switch {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: var(--accent); cursor: pointer; flex-shrink: 0;
+  position: relative;
+}
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%; background: #fff;
+}
+.toggle-off { background: var(--border); }
+.toggle-off::after { left: auto; right: 3px; }
+
+/* ── Progress table (in stats) ── */
+.prog-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.prog-table th {
+  font-family: ui-monospace, monospace; font-size: 0.62rem; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--muted); text-align: left;
+  padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border);
+}
+.prog-table td { padding: 0.55rem 0.5rem; border-bottom: 1px solid rgba(42,42,53,0.5); }
+.prog-table tr:last-child td { border-bottom: none; }
+.ep-done-dot { color: var(--ok); }
+.ep-prog-dot { color: var(--accent); }
+.ep-lock-dot { color: var(--border); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back-link" href="index.html">← Назад до курсу</a>
+
+<!-- Header -->
+<div class="dash-header">
+  <div class="dash-header-left">
+    <h1>Привіт, Олено.</h1>
+    <p>Це що Марко робив у курсі цього тижня</p>
+  </div>
+  <div class="dash-header-right">
+    <button class="hdr-btn" id="btnStats" onclick="togglePanel('stats')">📊 Статистика</button>
+    <button class="hdr-btn" id="btnSettings" onclick="togglePanel('settings')">⚙ Налаштування</button>
+  </div>
+</div>
+
+<!-- KPI cards -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">Час цей тиждень</div>
+    <div class="kpi-value">1:42</div>
+    <div class="kpi-trend">↑ +18% vs минулий</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Епізоди</div>
+    <div class="kpi-value">3 / 50</div>
+    <div class="kpi-trend neutral">+1 в процесі</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Відповіді</div>
+    <div class="kpi-value">8 / 11</div>
+    <div class="kpi-trend neutral">з 1-ї спроби</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Серія</div>
+    <div class="kpi-value">3 дні 🔥</div>
+    <div class="kpi-trend neutral">макс: 9</div>
+  </div>
+</div>
+
+<!-- Activity chart -->
+<div class="section-block">
+  <div class="section-title">Активність по днях</div>
+  <div class="section-sub">остання активність: вчора, 19:42</div>
+  <div class="chart-wrap">
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar" style="height:20%"></div></div>
+      <div class="chart-day-label">пн</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar mid" style="height:55%"></div></div>
+      <div class="chart-day-label">вт</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar" style="height:10%"></div></div>
+      <div class="chart-day-label">ср</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar active" style="height:90%"></div></div>
+      <div class="chart-day-label">чт</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar mid" style="height:65%"></div></div>
+      <div class="chart-day-label">пт</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar active" style="height:100%"></div></div>
+      <div class="chart-day-label">сб</div>
+    </div>
+    <div class="chart-day">
+      <div class="chart-bar-wrap"><div class="chart-bar" style="height:5%"></div></div>
+      <div class="chart-day-label">нд</div>
+    </div>
+  </div>
+</div>
+
+<!-- Ideas -->
+<div class="section-block">
+  <div class="section-title">Три ідеї цього тижня — є про що поговорити</div>
+  <div style="margin-top:0.75rem">
+    <div class="idea-item">
+      <span class="idea-ep">EP 1.7</span>
+      <span class="idea-text">«Думка — це те, що не можна перевірити приладами. У кожного вона своя.»</span>
+    </div>
+    <div class="idea-item">
+      <span class="idea-ep">EP 2.3</span>
+      <span class="idea-text">«Неправда буває різна: жарт, помилка, обман. Не всі вони однаково погані.»</span>
+    </div>
+    <div class="idea-item">
+      <span class="idea-ep">EP 2.4</span>
+      <span class="idea-text">«Найкращий» — це не факт, це думка. Кращого не можна виміряти.»</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Stats panel ── -->
+<div class="stats-panel" id="statsPanel">
+  <div class="section-block">
+    <div class="section-title">Прогрес по епізодах</div>
+    <div style="margin-top:0.85rem; overflow-x:auto">
+      <table class="prog-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Назва</th>
+            <th>Статус</th>
+            <th>Відповіді</th>
+            <th>Зірки</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ep-done-dot">●</span> 1</td>
+            <td>Ранок без сестри</td>
+            <td style="color:var(--ok)">Завершено</td>
+            <td>6 / 6</td>
+            <td>★★☆</td>
+          </tr>
+          <tr>
+            <td><span class="ep-prog-dot">●</span> 2</td>
+            <td>Неправда та її види</td>
+            <td style="color:var(--accent)">В процесі</td>
+            <td>2 / 5</td>
+            <td>☆☆☆</td>
+          </tr>
+          <tr>
+            <td><span class="ep-lock-dot">●</span> 3</td>
+            <td>Хитрі твердження</td>
+            <td style="color:var(--muted)">Заблоковано</td>
+            <td>—</td>
+            <td>☆☆☆</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── Settings panel ── -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="section-block">
+    <div class="section-title">Налаштування</div>
+    <div class="settings-group" style="margin-top:0.85rem">
+      <div class="setting-row">
+        <span class="setting-label">⏰ Денний ліміт</span>
+        <select class="setting-select">
+          <option>30 хв</option>
+          <option selected>45 хв</option>
+          <option>60 хв</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🔔 Час нагадування</span>
+        <select class="setting-select">
+          <option>18:00</option>
+          <option selected>19:00</option>
+          <option>20:00</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🎚️ Темп озвучки</span>
+        <select class="setting-select">
+          <option>Повільно</option>
+          <option selected>Нормально</option>
+          <option>Швидко</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">📬 Email-звіт щотижня</span>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🌙 Вечірній режим після 20:00</span>
+        <div class="toggle-switch toggle-off"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function togglePanel(name) {
+  var sp = document.getElementById('statsPanel');
+  var se = document.getElementById('settingsPanel');
+  var bs = document.getElementById('btnStats');
+  var bg = document.getElementById('btnSettings');
+  if (name === 'stats') {
+    var open = sp.classList.contains('visible');
+    sp.classList.toggle('visible', !open);
+    se.classList.remove('visible');
+    bs.classList.toggle('active', !open);
+    bg.classList.remove('active');
+  } else {
+    var open = se.classList.contains('visible');
+    se.classList.toggle('visible', !open);
+    sp.classList.remove('visible');
+    bg.classList.toggle('active', !open);
+    bs.classList.remove('active');
+  }
+}
+</script>
+</body>
+</html>

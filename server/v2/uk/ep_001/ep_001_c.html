@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Варіант C — Читання · Ранок без сестри</title>
+<style>
+:root {
+  --bg: #0d0d12;
+  --text: #e8e6e3;
+  --muted: #8a8a8a;
+  --accent: #c7b8e8;
+  --border: #2a2a35;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Georgia', serif;
+  --reading-size: 1.1rem;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
+body { display: flex; flex-direction: column; }
+
+/* Variant label */
+.variant-label {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.75rem 1.1rem;
+  background: rgba(13,13,18,0.97); border-bottom: 1px solid var(--border);
+}
+.v-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #0d0d12;
+  font-family: var(--font-ui); font-size: 0.78rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.v-name {
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text); font-weight: 600;
+}
+.v-name span { color: var(--muted); font-weight: 400; }
+
+/* Player — fills remaining space */
+.player {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #1a1510;
+}
+.player-bg {
+  position: absolute; inset: 0;
+  background-image: url('https://pub-77b6fd849494491a8cd26f9e0df3db3f.r2.dev/ep_001/images/ep001_s01.png');
+  background-size: cover; background-position: center top;
+}
+.player-vignette {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,0.45) 0%,
+    rgba(0,0,0,0.0) 25%,
+    rgba(0,0,0,0.0) 40%,
+    rgba(0,0,0,0.88) 100%);
+}
+
+/* Top bar inside player */
+.player-topbar {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+}
+.player-topbar-back {
+  font-size: 0.78rem; color: rgba(255,255,255,0.7);
+  text-decoration: none; min-width: 52px;
+}
+.player-topbar-back:hover { color: #fff; }
+.player-topbar-title {
+  font-size: 0.78rem; color: rgba(255,255,255,0.85);
+  text-align: center; flex: 1;
+  font-family: var(--font-ui);
+}
+.player-topbar-ctrls {
+  display: flex; gap: 0.4rem; min-width: 52px; justify-content: flex-end;
+}
+.ctrl-btn {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; border-radius: 6px; padding: 0.25rem 0.5rem;
+  font-size: 0.72rem; cursor: pointer; font-family: var(--font-ui);
+}
+.ctrl-btn:hover { background: rgba(255,255,255,0.22); }
+
+/* Text overlay on image */
+.player-text {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0.85rem 1.1rem 0.7rem;
+}
+.overlay-line {
+  font-family: var(--font-serif);
+  font-size: var(--reading-size);
+  line-height: 1.6; color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+  margin-bottom: 0.3rem;
+}
+.overlay-line.next { color: rgba(255,255,255,0.55); }
+.overlay-line .hl {
+  background: rgba(199,184,232,0.35);
+  border-radius: 3px; padding: 0 3px;
+  color: #fff;
+}
+
+/* Scene dots (inside player, bottom row) */
+.player-dots {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 4px;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+/* Navigation bar */
+.nav-bar {
+  flex-shrink: 0;
+  background: rgba(13,13,18,0.95); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.nav-dots {
+  flex: 1; display: flex; gap: 5px; justify-content: center; align-items: center;
+}
+.ndot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.ndot.current { background: var(--accent); width: 16px; border-radius: 3px; }
+.ndot.done { background: rgba(199,184,232,0.4); width: 4px; height: 4px; }
+.nav-prev {
+  background: none; border: none; color: var(--muted);
+  font-size: 0.85rem; cursor: pointer; padding: 0.3rem 0.5rem;
+}
+.nav-prev:hover { color: var(--text); }
+.nav-next {
+  background: var(--accent); color: #0d0d12;
+  border: none; border-radius: 8px; padding: 0.45rem 1rem;
+  font-family: var(--font-ui); font-size: 0.88rem; font-weight: 700;
+  cursor: pointer;
+}
+.nav-next:hover { background: #d4c8f0; }
+
+/* ── Fixed controls (same glass style as variant A) ── */
+.v2-back {
+  position: fixed; top: 10px; left: 12px; z-index: 221;
+  background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 6px 10px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  text-decoration: none; line-height: 1;
+}
+.v2-back:hover { background: rgba(0,0,0,0.85); color: #fff; }
+
+.v2-controls {
+  position: fixed; top: 10px; right: 12px; z-index: 221;
+  display: flex; gap: 6px; align-items: center;
+}
+.v2-btn {
+  background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+  color: #fff; border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px; padding: 6px 10px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  cursor: pointer; min-width: 34px; text-align: center; line-height: 1;
+}
+.v2-btn:hover { background: rgba(0,0,0,0.85); }
+.v2-btn.active { background: rgba(199,184,232,0.85); color: #0d0d12; border-color: transparent; }
+
+/* Variant badge */
+.v-badge {
+  position: fixed; bottom: 12px; right: 12px; z-index: 200;
+  background: rgba(0,0,0,0.8); color: var(--accent);
+  font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700;
+  padding: 5px 8px; border-radius: 6px; border: 1px solid rgba(199,184,232,0.35);
+}
+
+/* Font size classes */
+body.fs-small  { --reading-size: 0.92rem; }
+body.fs-large  { --reading-size: 1.35rem; }
+</style>
+</head>
+<body id="bodyEl">
+
+<div class="v-badge">ВАРІАНТ C</div>
+
+<!-- Fixed: back button top-left -->
+<a class="v2-back" href="../index.html">← Курс</a>
+
+<!-- Fixed: controls top-right -->
+<div class="v2-controls">
+  <button class="v2-btn" id="speed-btn" onclick="cycleSpeed()">1×</button>
+  <button class="v2-btn" id="play-btn" onclick="togglePlay()">▶</button>
+  <button class="v2-btn">🔇</button>
+  <button class="v2-btn">🌐 RU</button>
+</div>
+
+<!-- Variant label -->
+<div class="variant-label">
+  <div class="v-circle">C</div>
+  <div class="v-name">РЕЖИМ ЧИТАННЯ <span>(КНИГА)</span></div>
+</div>
+
+<!-- Player (35vh) -->
+<div class="player">
+  <div class="player-bg"></div>
+  <div class="player-vignette"></div>
+
+  <div class="player-topbar">
+    <span style="min-width:52px"></span>
+    <span class="player-topbar-title">Ранок без сестри · с. 1</span>
+    <div class="player-topbar-ctrls">
+      <button class="ctrl-btn" onclick="cycleFont()">Аа</button>
+      <button class="ctrl-btn">📖→🎬</button>
+    </div>
+  </div>
+
+  <div class="player-text">
+    <p class="overlay-line">Марко <span class="hl">розплющує очі</span>. Стеля біла. Звичайна.</p>
+    <p class="overlay-line next">Ліжко навпроти — порожнє. Ковдра застелена.</p>
+  </div>
+</div>
+
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <button class="nav-prev">←</button>
+  <div class="nav-dots">
+    <span class="ndot current"></span>
+    <span class="ndot"></span><span class="ndot"></span>
+    <span class="ndot"></span><span class="ndot"></span>
+    <span class="ndot"></span><span class="ndot"></span>
+    <span class="ndot"></span><span class="ndot"></span>
+  </div>
+  <button class="nav-next">Далі →</button>
+</div>
+
+<script>
+var fontSizes = ["", "fs-small", "fs-large"];
+var fontIdx = 0;
+function cycleFont() {
+  document.getElementById("bodyEl").classList.remove(fontSizes[fontIdx]);
+  fontIdx = (fontIdx + 1) % fontSizes.length;
+  if (fontSizes[fontIdx]) document.getElementById("bodyEl").classList.add(fontSizes[fontIdx]);
+}
+
+var speeds = ["1×", "1.5×", "2×"];
+var speedIdx = 0;
+function cycleSpeed() {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  document.getElementById("speed-btn").textContent = speeds[speedIdx];
+}
+
+var playing = false;
+function togglePlay() {
+  playing = !playing;
+  var btn = document.getElementById("play-btn");
+  btn.textContent = playing ? "⏸" : "▶";
+  btn.classList.toggle("active", playing);
+}
+</script>
+</body>
+</html>

@@ -49,9 +49,7 @@ BODY_INJECTION = (
     # Speaker toggle: переключает audio-mode ↔ text-mode (проксирует #text-toggle).
     # 🔊 = аудио включено, 🔇 = текстовая мода.
     '<button id="v2-speaker" type="button" title="Динамик: аудио / текст" aria-label="Динамик">🔇</button>'
-    '<button id="v2-lang" type="button" title="Перевод (UK ↔ RU)" aria-label="Перевод">🌐 Перевод</button>'
-    # DEBUG: форс-перемотка на следующую сцену в обход игровой логики. Убрать перед релизом.
-    '<button id="v2-debug-next" type="button" title="DEBUG: перейти к следующей сцене" aria-label="DEBUG Next">⏭ Дальше</button>'
+    '<button id="v2-lang" type="button" title="Перейти до RU-версії" aria-label="RU">🌐 RU</button>'
     '</div>\n'
     '<div id="v2-scene-badge">—</div>\n'
 )
@@ -77,7 +75,8 @@ PROD_OVERRIDES = (
     'font-size:13px;font-weight:600;min-width:36px;text-align:center'
     '}'
     '#v2-audio-controls button:hover{background:rgba(0,0,0,0.85)}'
-    # Scene-badge: верх-лево, контрастный моно-шрифт. Показывает epNNN_sMM.
+    # Scene-badge: верх-лево, показывает "Сцена X / Y".
+    '#v2-scene-badge::before{content:"Сцена ";font-weight:400;opacity:0.7}'
     '#v2-scene-badge{'
     'position:fixed;top:10px;left:12px;z-index:220;'
     'background:rgba(0,0,0,0.7);color:#fff;'
@@ -176,7 +175,11 @@ PROD_OVERRIDES = (
     '\n'
     '  function updateBadge(sid) {\n'
     '    var badge = document.getElementById("v2-scene-badge");\n'
-    '    if (badge) badge.textContent = sid || "—";\n'
+    '    if (!badge) return;\n'
+    '    var scenes = document.querySelectorAll("section.scene");\n'
+    '    var cur = sid ? document.querySelector(\'section.scene[data-scene-id="\' + sid + \'"]\') : null;\n'
+    '    if (!cur || !scenes.length) { badge.textContent = ""; return; }\n'
+    '    badge.textContent = (Array.from(scenes).indexOf(cur) + 1) + " / " + scenes.length;\n'
     '  }\n'
     '\n'
     '  // Text-mode choice-gate: пока юзер не нажал «Дальше» на сцене\n'

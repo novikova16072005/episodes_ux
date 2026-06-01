@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -649,7 +649,7 @@ body.debug-off .voice-subtitle { display: none; }
   .quiz-option { min-width: 100%; }
   .episode-header h1 { font-size: 1.3rem; }
 }
-</style>
+#v2-scene-badge::before{content:"Сцена ";font-weight:400;opacity:0.7}</style>
 <style id="v2-prod-overrides">.ipe-debug{display:none!important}.audio-controls,.episode-nav{display:none!important}#v2-audio-controls{position:fixed;top:10px;right:12px;z-index:220;display:flex;gap:6px;align-items:center}#v2-audio-controls button{background:rgba(0,0,0,0.65);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:7px 10px;line-height:1;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;font-weight:600;min-width:36px;text-align:center}#v2-audio-controls button:hover{background:rgba(0,0,0,0.85)}#v2-scene-badge{position:fixed;top:10px;left:12px;z-index:220;background:rgba(0,0,0,0.7);color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:600;letter-spacing:0.02em;padding:6px 9px;border-radius:6px;border:1px solid rgba(255,255,255,0.22);pointer-events:none}.scene{animation:none!important}body.audio-mode section.scene:not(.audio-done) .story-choice{display:none!important}body:not(.audio-mode) section.scene.active:not(.v2-choice-revealed) .story-choice{display:none!important}body:not(.audio-mode) section.scene.active.v2-choice-revealed .story-choice{position:static!important;bottom:auto!important;left:auto!important;right:auto!important;padding:0!important;margin-top:1.25rem!important;z-index:auto!important}body.audio-mode section.scene.active{overflow:visible!important}.nav-bar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}</style>
 <script id="v2-audio-done-tracker">
 (function () {
@@ -703,7 +703,11 @@ body.debug-off .voice-subtitle { display: none; }
 
   function updateBadge(sid) {
     var badge = document.getElementById("v2-scene-badge");
-    if (badge) badge.textContent = sid || "—";
+    if (!badge) return;
+    var scenes = document.querySelectorAll("section.scene");
+    var cur = sid ? document.querySelector('section.scene[data-scene-id="' + sid + '"]') : null;
+    if (!cur || !scenes.length) { badge.textContent = ""; return; }
+    badge.textContent = (Array.from(scenes).indexOf(cur) + 1) + " / " + scenes.length;
   }
 
   // Text-mode choice-gate: пока юзер не нажал «Дальше» на сцене
@@ -955,7 +959,7 @@ body.debug-off .voice-subtitle { display: none; }
 </script>
 </head>
 <body class="lang-uk">
-<div id="v2-audio-controls"><button id="v2-rate" type="button" title="Скорость 1× / 2×" aria-label="Скорость">1×</button><button id="v2-play" type="button" title="Play / Pause" aria-label="Play/Pause">▶</button><button id="v2-speaker" type="button" title="Динамик: аудио / текст" aria-label="Динамик">🔇</button><button id="v2-lang" type="button" title="Перевод (UK ↔ RU)" aria-label="Перевод">🌐 Перевод</button><button id="v2-debug-next" type="button" title="DEBUG: перейти к следующей сцене" aria-label="DEBUG Next">⏭ Дальше</button></div>
+<div id="v2-audio-controls"><button id="v2-rate" type="button" title="Скорость 1× / 2×" aria-label="Скорость">1×</button><button id="v2-play" type="button" title="Play / Pause" aria-label="Play/Pause">▶</button><button id="v2-speaker" type="button" title="Динамик: аудио / текст" aria-label="Динамик">🔇</button><button id="v2-lang" type="button" title="Перейти до RU-версії" aria-label="RU">🌐 RU</button></div>
 <div id="v2-scene-badge">—</div>
 
 
@@ -1224,7 +1228,7 @@ body.debug-off .voice-subtitle { display: none; }
   </section>
 
 <div class="end-screen" id="endScreen">
-  <h2>Конец эпизода 50</h2>
+  <h2>Кінець епізоду 50</h2>
   <p>«Один»</p>
   <div class="stats" id="stats"></div>
 </div>
@@ -1233,7 +1237,7 @@ body.debug-off .voice-subtitle { display: none; }
 
 <div class="nav-bar">
   <button class="nav-btn" id="btnPrev" disabled>← Назад</button>
-  <button class="nav-btn primary" id="btnNext">Дальше →</button>
+  <button class="nav-btn primary" id="btnNext">Далі →</button>
   
 </div>
 
@@ -1514,10 +1518,10 @@ var CFG={typingBase:80,typingRand:40,interMsg:60,afterSend:80,initDelay:30,voMin
       if(!m||m.s!=='marko'||m.t!=='voice')return;
       if(micBtn.classList.contains('recording'))return;
       micBtn.classList.add('recording');
-      micLabel.textContent='\u0417\u0430\u043f\u0438\u0441\u044c...';micLabel.classList.add('rec');
+      micLabel.textContent='\u0417\u0430\u043f\u0438\u0441......';micLabel.classList.add('rec');
       setTimeout(function(){
         micBtn.classList.remove('recording');
-        micLabel.textContent='\u0413\u043e\u043b\u043e\u0441\u043e\u0432\u043e\u0435';micLabel.classList.remove('rec');
+        micLabel.textContent='\u0413\u043e\u043b\u043e\u0441\u043e\u0432\u0438\u0439';micLabel.classList.remove('rec');
         addVoice(m);setMode('disabled');
         idx++;setTimeout(processNext,CFG.afterSend);
       },CFG.recSim);
